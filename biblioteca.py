@@ -20,6 +20,24 @@ class Digrafo:
         return qnt_vertices
     def Gm(self):# retorna o numero de arestas do grafo
         return self.qnt_arestas
+    def Gvizpos(self, vertice): #o parametro e passado como string, retorna a vizinhanca positiva
+        vizinhos = []
+        for vizinho in self.listaAdj.lista[vertice]:
+            vizinhos.append(vizinho[0])
+        return vizinhos
+    def Gvizneg(self,vertice):#a logica esta em verificar a pos[0] da listaAdj (vertice de destino) e pegar a chave do dicionario(vertice de origem)
+        vizinhos = []
+        for i in self.listaAdj.lista.keys():
+            for j in self.listaAdj.lista[i]:
+                if (j[0] == vertice):
+                    vizinhos.append(i)
+        return vizinhos
+    def Gdpos(self, vertice): #retorna o grau de um vertice para sua vizinhanca positiva
+        if vertice in self.listaAdj.lista:
+            return len(self.listaAdj.lista[vertice])
+    def Gdneg(self, vertice): #retorna o grau de um vertice para sua vizinhanca negativa
+        vizinhosNegativos = self.Gvizneg(vertice)
+        return len(vizinhosNegativos)
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
         self.lista = {} #dicionario, a chave seria o vertice, a key seria uma lista [[vertice de chegada, peso da aresta], ...]
@@ -30,7 +48,7 @@ class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao 
         aresta = [destino, peso]
         arestaVolta=[origem, peso]
         self.lista[origem].append(aresta)
-        if self.tipo == "grafo": #se nao for digrafo, tambem deve-se adicionar o vizinho no vertice de origem
+        if self.tipo == "grafo": #se nao for digrafo, tambem deve-se adicionar o vizinho no vertice de destino
             self.lista[destino].append(arestaVolta)
 class Grafo:
     def __init__(self, caminho): #dou o caminho de onde estara o grafo
@@ -54,3 +72,11 @@ class Grafo:
         return qnt_vertices
     def Gm(self):# retorna o numero de arestas do grafo
         return self.qnt_arestas
+    def Gviz(self, vertice): #o parametro e passado como string, retorna a vizinhanca do vertice
+        vizinhos = []
+        for vizinho in self.listaAdj.lista[vertice]:
+            vizinhos.append(vizinho[0])
+        return vizinhos
+    def Gd(self, vertice): #retorna o grau de um vertice
+        if vertice in self.listaAdj.lista:
+            return len(self.listaAdj.lista[vertice])
