@@ -53,12 +53,20 @@ class Digrafo:
                 return i[1].split("\n")[0]
 
     def Gmind(self):  # retorna o vertice com menor grau e seu grau
-        menorGrau = ["", math.inf] #aqui teremos o vertice e deu grau menor, inicialei com um grau infinito para ir trocando depois
+        menorGrau = ["", math.inf] #aqui teremos o vertice e o maior grau do digrafo, inicialei com um grau infinito para ir trocando depois
         for key in self.listaAdj.lista:
             if len(self.listaAdj.lista[key]) < menorGrau[1]:
                 menorGrau[0] = key
                 menorGrau[1] = len(self.listaAdj.lista[key])
         return menorGrau #observacao, pode ser que o vertice nao seja o unico a ter o menor grau, pego o primeiro vertice com o menor grau
+
+    def Gmaxd(self): #retorna o vertice com maior grau e seu grau (a primeira ocorrencia dele)
+        maiorGrau = ["", 0] #aqui teremos o vertice e o maior grau do grafo
+        for key in self.listaAdj.lista:
+            if len(self.listaAdj.lista[key]) > maiorGrau[1]:
+                maiorGrau[0] = key
+                maiorGrau[1] = len(self.listaAdj.lista[key])
+        return maiorGrau
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
         self.lista = {} #dicionario, a chave seria o vertice, a key seria uma lista [[vertice de chegada, peso da aresta], ...]
@@ -115,9 +123,17 @@ class Grafo:
                 return i[1].split("\n")[0]
 
     def Gmind(self):  # retorna o vertice com menor grau e seu grau
-        menorGrau = ["", math.inf]  # aqui teremos o vertice e deu grau menor, inicialei com um grau infinito para ir trocando depois
+        menorGrau = ["", math.inf]  # aqui teremos o vertice e o maior grau do grafo, inicialei com um grau infinito para ir trocando depois
         for key in self.listaAdj.lista:
             if len(self.listaAdj.lista[key]) < menorGrau[1]:
                 menorGrau[0] = key
                 menorGrau[1] = len(self.listaAdj.lista[key])
         return menorGrau #observacao, pode ser que o vertice nao seja o unico a ter o menor grau, pego o primeiro vertice com o menor grau
+
+    def Gmaxd(self): #retorna o vertice com maior grau e seu grau (a primeira ocorrencia dele)
+        maiorGrau = ["", 0] #aqui teremos o vertice e o maior grau do grafo
+        for key in self.listaAdj.lista:
+            if len(self.listaAdj.lista[key]) > maiorGrau[1]:
+                maiorGrau[0] = key
+                maiorGrau[1] = len(self.listaAdj.lista[key])
+        return maiorGrau
