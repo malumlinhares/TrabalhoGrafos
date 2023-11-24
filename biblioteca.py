@@ -68,9 +68,9 @@ class Digrafo:
                 maiorGrau[1] = len(self.listaAdj.lista[key])
         return maiorGrau
     def bfs(self, vertice): #deixarei o usuario escolher qual vertice ele quer iniciar
-        vertices = {} #aqui inicializo um dicionario em que o vertice e a chave, a chave seria uma lista com cor, distancia e predecessor, respectivamente
-        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera a distancia em relacao ao vertice passado como parametro
-        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera o seu predecessor
+        vertices = {} #aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, distancia e predecessor, respectivamente
+        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera a distancia em relacao ao vertice passado como parametro
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         Q = [] #lista com os vertices a serem visitados
         for key in self.listaAdj.lista:
             vertices[key] = ["branco", math.inf, None]
@@ -92,7 +92,7 @@ class Digrafo:
 
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
-        self.lista = {} #dicionario, a chave seria o vertice, a key seria uma lista [[vertice de chegada, peso da aresta], ...]
+        self.lista = {} #dicionario, a chave seria o vertice, o valor seria uma lista [[vertice de chegada, peso da aresta], ...]
         self.tipo = tipo #diz o tipo do grafo, digito "grafo" para grafo e "digrafo" para digrafo.
 
     def addVertice(self, vertice): #adicionando um vertice a lista adjacente.
@@ -161,9 +161,9 @@ class Grafo:
                 maiorGrau[1] = len(self.listaAdj.lista[key])
         return maiorGrau
     def bfs(self, vertice): #deixarei o usuario escolher qual vertice ele quer iniciar
-        vertices = {} #aqui inicializo um dicionario em que o vertice e a chave, a chave seria uma lista com cor, distancia e predecessor, respectivamente
-        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera a distancia em relacao ao vertice passado como parametro
-        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera o seu predecessor
+        vertices = {} #aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, distancia e predecessor, respectivamente
+        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera a distancia em relacao ao vertice passado como parametro
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         Q = [] #lista com os vertices a serem visitados
         for key in self.listaAdj.lista:
             vertices[key] = ["branco", math.inf, None]
