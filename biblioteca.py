@@ -1,4 +1,4 @@
-import math
+import math #uso para numeros infinitos
 class Digrafo:
     def __init__(self, caminho): #dou o caminho de onde estara o grafo
         self.tipo = "digrafo"
@@ -67,6 +67,29 @@ class Digrafo:
                 maiorGrau[0] = key
                 maiorGrau[1] = len(self.listaAdj.lista[key])
         return maiorGrau
+    def bfs(self, vertice): #deixarei o usuario escolher qual vertice ele quer iniciar
+        vertices = {} #aqui inicializo um dicionario em que o vertice e a chave, a chave seria uma lista com cor, distancia e predecessor, respectivamente
+        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera a distancia em relacao ao vertice passado como parametro
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera o seu predecessor
+        Q = [] #lista com os vertices a serem visitados
+        for key in self.listaAdj.lista:
+            vertices[key] = ["branco", math.inf, None]
+        Q.append(vertice)
+        vertices[vertice] = ["cinza", 0, None]
+        while len(Q) > 0:
+            Q.remove(vertice)
+            for i in self.listaAdj.lista[vertice]:
+                if vertices[i[0]][0] == "branco":
+                    vertices[i[0]] = ["cinza", vertices[vertice][1]+1, vertice]
+                    Q.append(i[0])
+            vertices[vertice][0] = "preto"
+            if len(Q) > 0:
+                vertice = Q[0]
+        for i in vertices:
+            d[i] = vertices[i][1]
+            pi[i] = vertices[i][2]
+        return d,pi
+
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
         self.lista = {} #dicionario, a chave seria o vertice, a key seria uma lista [[vertice de chegada, peso da aresta], ...]
@@ -137,3 +160,25 @@ class Grafo:
                 maiorGrau[0] = key
                 maiorGrau[1] = len(self.listaAdj.lista[key])
         return maiorGrau
+    def bfs(self, vertice): #deixarei o usuario escolher qual vertice ele quer iniciar
+        vertices = {} #aqui inicializo um dicionario em que o vertice e a chave, a chave seria uma lista com cor, distancia e predecessor, respectivamente
+        d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera a distancia em relacao ao vertice passado como parametro
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e a chave sera o seu predecessor
+        Q = [] #lista com os vertices a serem visitados
+        for key in self.listaAdj.lista:
+            vertices[key] = ["branco", math.inf, None]
+        Q.append(vertice)
+        vertices[vertice] = ["cinza", 0, None]
+        while len(Q) > 0:
+            Q.remove(vertice)
+            for i in self.listaAdj.lista[vertice]:
+                if vertices[i[0]][0] == "branco":
+                    vertices[i[0]] = ["cinza", vertices[vertice][1]+1, vertice]
+                    Q.append(i[0])
+            vertices[vertice][0] = "preto"
+            if len(Q) > 0:
+                vertice = Q[0]
+        for i in vertices:
+            d[i] = vertices[i][1]
+            pi[i] = vertices[i][2]
+        return d,pi
