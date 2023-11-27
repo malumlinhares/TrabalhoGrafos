@@ -1,4 +1,5 @@
 import math #uso para numeros infinitos
+tempo = 0 #usei o tempo de forma global para tentar diminuir o espaco de recursividade usado pelo computador em dfs
 class Digrafo:
     def __init__(self, caminho): #dou o caminho de onde estara o grafo
         self.tipo = "digrafo"
@@ -21,7 +22,7 @@ class Digrafo:
             qnt_vertices+=1
         return qnt_vertices
 
-    def Gm(self):# retorna o numero de arestas do grafo
+    def Gm(self):# retorna o numero de arestas do digrafo
         return self.qnt_arestas
 
     def Gvizpos(self, vertice): #o parametro e passado como string, retorna a vizinhanca positiva
@@ -67,6 +68,7 @@ class Digrafo:
                 maiorGrau[0] = key
                 maiorGrau[1] = len(self.listaAdj.lista[key])
         return maiorGrau
+
     def bfs(self, vertice): #deixarei o usuario escolher qual vertice ele quer iniciar
         vertices = {} #aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, distancia e predecessor, respectivamente
         d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera a distancia em relacao ao vertice passado como parametro
@@ -89,6 +91,36 @@ class Digrafo:
             d[i] = vertices[i][1]
             pi[i] = vertices[i][2]
         return d,pi
+
+    def inicia_dfs(self): #deixarei o usuario escolher qual o vertice ele quer iniciar
+        vertices = {}  # aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, tempo (tempo estaram e uma lista, a posicao 0 seria o tempo de inicio e a pos 1 tempo final e predecessor, respectivamente
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
+        temp_ini = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo inicial em que o algortimo acessou o vertice
+        temp_final = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo final em que o algortimo acessou o vertice
+        for key in self.listaAdj.lista:
+            vertices[key] = ["branco", [], None]
+        for v in vertices:
+            if vertices[v][0] == "branco":
+                self.busca_dfs(v, vertices)
+        for v in vertices:
+            pi[v] = vertices[v][2]
+            temp_ini[v] = vertices[v][1][0]
+            temp_final[v] = vertices[v][1][1]
+        return pi, temp_ini, temp_final
+
+    def busca_dfs(self, v, vertices):
+        global tempo
+        tempo = tempo + 1
+        vertices[v][1].append(tempo)
+        vertices[v][0] = "cinza"
+        for vizinho in self.listaAdj.lista[v]:
+            if vertices[vizinho[0]][0] == "branco":
+                vertices[vizinho[0]][2] = v
+                self.busca_dfs(vizinho[0], vertices)
+        tempo += 1
+        vertices[v][1].append(tempo)
+        vertices[v][0] = "preto"
+        #print(v,vertices[v])
 
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
@@ -182,3 +214,31 @@ class Grafo:
             d[i] = vertices[i][1]
             pi[i] = vertices[i][2]
         return d,pi
+    def inicia_dfs(self): #deixarei o usuario escolher qual o vertice ele quer iniciar
+        vertices = {}  # aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, tempo (tempo estaram e uma lista, a posicao 0 seria o tempo de inicio e a pos 1 tempo final e predecessor, respectivamente
+        pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
+        temp_ini = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo inicial em que o algortimo acessou o vertice
+        temp_final = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo final em que o algortimo acessou o vertice
+        for key in self.listaAdj.lista:
+            vertices[key] = ["branco", [], None]
+        for v in vertices:
+            if vertices[v][0] == "branco":
+                self.busca_dfs(v, vertices)
+        for v in vertices:
+            pi[v] = vertices[v][2]
+            temp_ini[v] = vertices[v][1][0]
+            temp_final[v] = vertices[v][1][1]
+        print("1", vertices["1"])
+        return pi, temp_ini, temp_final
+    def busca_dfs(self, v, vertices):
+        global tempo
+        tempo = tempo + 1
+        vertices[v][1].append(tempo)
+        vertices[v][0] = "cinza"
+        for vizinho in self.listaAdj.lista[v]:
+            if vertices[vizinho[0]][0] == "branco":
+                vertices[vizinho[0]][2] = v
+                self.busca_dfs(vizinho[0], vertices)
+        tempo += 1
+        vertices[v][1].append(tempo)
+        vertices[v][0] = "preto"
