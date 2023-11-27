@@ -1,7 +1,7 @@
 from biblioteca import *
 import sys
-sys.setrecursionlimit(550000)
-a = Digrafo("USA-road-d.NY.gr")
+sys.setrecursionlimit(10000)
+a = Grafo("USA-road-d.NY.gr")
 print(a.Gn())
 print(a.Gm())
 print(a.listaAdj.lista["1"])
