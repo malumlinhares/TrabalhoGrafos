@@ -121,6 +121,43 @@ class Digrafo:
         vertices[v][1].append(tempo)
         vertices[v][0] = "preto"
         #print(v,vertices[v])
+    def relaxa(self, origem, destino, vertices):
+        for valor in self.listaAdj.lista[origem]:
+            if valor[0] == destino:
+                peso = int(valor[1])
+        if float(vertices[destino][0]) > float(vertices[origem][0]) + int(peso):
+            vertices[destino][0] = int(vertices[origem][0]) + peso
+            vertices[destino][1] = origem
+        return vertices
+    def inicializa(self, v):
+        vertices = {}
+        vertices[v] = [0, None]
+        for key in self.listaAdj.lista:
+            if key != v:
+                vertices[key] = [math.inf, None] #pos 0 = distancia, pos 1 = pai
+        return vertices
+    def bf(self, v):
+        d = {}
+        pi = {}
+        vertices = self.inicializa(v)
+        total_vertices = self.Gn()
+        for i in range(1, total_vertices-1):
+            for arco in self.listaAdj.lista:
+                for aresta in self.listaAdj.lista[arco]:
+                    destino = aresta[0]
+                    vertices = self.relaxa(arco, destino, vertices)
+        for arco in self.listaAdj.lista:
+            for aresta in self.listaAdj.lista[arco]:
+                u = arco
+                v = aresta[0]
+                if int(vertices[v][0]) > int(vertices[u][0]) + int(aresta[1]):
+                    print("grafo com ciclo negativo")
+                    return
+        for i in vertices:
+            d[i] = vertices[i][0]
+            pi[i] = vertices[i][1]
+        return d, pi
+
 
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
@@ -242,3 +279,40 @@ class Grafo:
         tempo += 1
         vertices[v][1].append(tempo)
         vertices[v][0] = "preto"
+    def relaxa(self, origem, destino, vertices):
+        for valor in self.listaAdj.lista[origem]:
+            if valor[0] == destino:
+                peso = int(valor[1])
+        if float(vertices[destino][0]) > float(vertices[origem][0]) + int(peso):
+            vertices[destino][0] = int(vertices[origem][0]) + peso
+            vertices[destino][1] = origem
+        return vertices
+    def inicializa(self, v):
+        vertices = {}
+        vertices[v] = [0, None]
+        for key in self.listaAdj.lista:
+            if key != v:
+                vertices[key] = [math.inf, None] #pos 0 = distancia, pos 1 = pai
+        return vertices
+    def bf(self, v):
+        d = {}
+        pi = {}
+        vertices = self.inicializa(v)
+        total_vertices = self.Gn()
+        for i in range(1, total_vertices-1):
+            for arco in self.listaAdj.lista:
+                for aresta in self.listaAdj.lista[arco]:
+                    destino = aresta[0]
+                    vertices = self.relaxa(arco, destino, vertices)
+                    vertices = self.relaxa(destino, arco, vertices)
+        for arco in self.listaAdj.lista:
+            for aresta in self.listaAdj.lista[arco]:
+                u = arco
+                v = aresta[0]
+                if int(vertices[v][0]) > int(vertices[u][0]) + int(aresta[1]):
+                    print("grafo com ciclo negativo")
+                    return
+        for i in vertices:
+            d[i] = vertices[i][0]
+            pi[i] = vertices[i][1]
+        return d, pi
