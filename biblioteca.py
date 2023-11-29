@@ -1,3 +1,4 @@
+import heapq #uso para o metodo dijkstra
 import math #uso para numeros infinitos
 tempo = 0 #usei o tempo de forma global para tentar diminuir o espaco de recursividade usado pelo computador em dfs
 class Digrafo:
@@ -92,13 +93,15 @@ class Digrafo:
             pi[i] = vertices[i][2]
         return d,pi
 
-    def inicia_dfs(self): #deixarei o usuario escolher qual o vertice ele quer iniciar
+    def inicia_dfs(self, vInicial): #deixarei o usuario escolher qual o vertice ele quer iniciar
         vertices = {}  # aqui inicializo um dicionario em que o vertice seria a chave, o valor seria uma lista com cor, tempo (tempo estaram e uma lista, a posicao 0 seria o tempo de inicio e a pos 1 tempo final e predecessor, respectivamente
         pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         temp_ini = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo inicial em que o algortimo acessou o vertice
         temp_final = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo final em que o algortimo acessou o vertice
         for key in self.listaAdj.lista:
             vertices[key] = ["branco", [], None]
+        if vertices[vInicial][0] == "branco":
+            self.busca_dfs(vInicial,vertices)
         for v in vertices:
             if vertices[v][0] == "branco":
                 self.busca_dfs(v, vertices)
@@ -157,6 +160,39 @@ class Digrafo:
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
         return d, pi
+    def cria_heap(self,v):
+        Q = []
+        Q.append((0, v))
+        for i in self.listaAdj.lista.keys():
+            if i == v:
+                continue
+            else:
+                Q.append((math.inf, i))
+        return Q
+    def mantem_heap(self, Q, tupla):
+        Q.append(tupla)
+        heapq.heapify(Q)
+        return Q
+    def djikstra(self, v):
+        S=set()
+        vertices = self.inicializa(v)
+        Q = self.cria_heap(v)
+        d = {}
+        pi = {}
+        while len(Q)>0:
+            u = Q.pop(0)
+            if u[1] in S:
+                continue
+            S.add(u[1])
+            for v in self.listaAdj.lista[u[1]]:
+                vertices = self.relaxa(u[1],v[0],vertices)
+                tupla = (vertices[v[0]][0],v[0])
+                Q = self.mantem_heap(Q, tupla)
+        for i in vertices:
+            d[i] = vertices[i][0]
+            pi[i] = vertices[i][1]
+        return d, pi
+
 
 
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
@@ -265,7 +301,6 @@ class Grafo:
             pi[v] = vertices[v][2]
             temp_ini[v] = vertices[v][1][0]
             temp_final[v] = vertices[v][1][1]
-        print("1", vertices["1"])
         return pi, temp_ini, temp_final
     def busca_dfs(self, v, vertices):
         global tempo
@@ -312,6 +347,39 @@ class Grafo:
                 if int(vertices[v][0]) > int(vertices[u][0]) + int(aresta[1]):
                     print("grafo com ciclo negativo")
                     return
+        for i in vertices:
+            d[i] = vertices[i][0]
+            pi[i] = vertices[i][1]
+        return d, pi
+    def cria_heap(self,v):
+        Q = []
+        Q.append((0, v))
+        for i in self.listaAdj.lista.keys():
+            if i == v:
+                continue
+            else:
+                Q.append((math.inf, i))
+        return Q
+    def mantem_heap(self, Q, tupla):
+        Q.append(tupla)
+        heapq.heapify(Q)
+        return Q
+    def djikstra(self, v):
+        S=set()
+        vertices = self.inicializa(v)
+        Q = self.cria_heap(v)
+        d = {}
+        pi = {}
+        while len(Q)>0:
+            u = Q.pop(0)
+            if u[1] in S:
+                continue
+            S.add(u[1])
+            for v in self.listaAdj.lista[u[1]]:
+                vertices = self.relaxa(u[1],v[0],vertices)
+                vertices = self.relaxa(v[0], u[1], vertices)
+                tupla = (vertices[v[0]][0],v[0])
+                Q = self.mantem_heap(Q, tupla)
         for i in vertices:
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
