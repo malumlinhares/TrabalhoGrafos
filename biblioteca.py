@@ -192,8 +192,35 @@ class Digrafo:
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
         return d, pi
+    def detectaCiclos(self, vInicial, tamDesejado):
+        pi, tempi, tempf = self.inicia_dfs(vInicial)
+        for u in self.listaAdj.lista:
+            for aresta in self.listaAdj.lista[u]:
+                v = aresta[0] #aresta[0] armazena o vertice de destino, no caso o v
+                if float(tempi[v]) < float(tempi[u]) and float(tempf[v]) > float(tempf[u]):
+                    #para evitar caminhos muitos grandes, restringi os caminhos a 15
+                    if (float(tempi[u]) - float(tempi[v])) < tamDesejado and (float(tempi[u]) - float(tempi[v])) < 15:
+                        filho = u  # descendente de v, u deve ser guardado
+                        caminho = [filho]  # o ciclo é inicializado com u, vou guardando o caminho em uma lista
+                        pai = pi[filho]  # pai = u.pi
+                        while pai != v:
+                            caminho.append(pi[filho])  # adiciona os novos vértices ancestrais de u no ciclo para v
+                            pai = pi[pai]  # pai = pai.pi
+                            filho = pi[filho]  # filho = filho.pi
+                        caminho.append(pai)  # adiciona v ao final do ciclo
+                        if len(caminho) >= tamDesejado: #retorno o ciclo com o tamanho desejado, no caso do item e, seria 5, entao passo 5 como parametro
+                            return caminho
 
-
+    def achaCaminho(self, vOrigem, vDestino):
+        d, pi = self.bfs(vOrigem)
+        caminho = []
+        atual = vDestino
+        while atual != vOrigem: #vou acessando os pais dos pais, comeco no destino e termino quando eu encontrar a origem, o grafo precisa ser conexo para sempre dar certo
+            caminho.append(atual)
+            atual = pi[atual]
+        caminho.append(vOrigem)
+        caminho.reverse()# inverto a ordem, pois comecei no vertice de destino
+        return caminho
 
 class ListaAdj: #resolvemos criar uma classe de lista adj para evitar repeticao de codigo, tambem escolhemos a lista por menor complexidade
     def __init__(self, tipo):
@@ -384,3 +411,32 @@ class Grafo:
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
         return d, pi
+    def detectaCiclos(self, vInicial, tamDesejado):
+        pi, tempi, tempf = self.inicia_dfs(vInicial)
+        for u in self.listaAdj.lista:
+            for aresta in self.listaAdj.lista[u]:
+                v = aresta[0] #aresta[0] armazena o vertice de destino, no caso o v
+                if float(tempi[v]) < float(tempi[u]) and float(tempf[v]) > float(tempf[u]):
+                    #para evitar caminhos muitos grandes, restringi os caminhos a 15
+                    if (float(tempi[u]) - float(tempi[v])) < tamDesejado and (float(tempi[u]) - float(tempi[v])) < 15:
+                        filho = u  # descendente de v, u deve ser guardado
+                        caminho = [filho]  # o ciclo é inicializado com u, vou guardando o caminho em uma lista
+                        pai = pi[filho]  # pai = u.pi
+                        while pai != v:
+                            caminho.append(pi[filho])  # adiciona os novos vértices ancestrais de u no ciclo para v
+                            pai = pi[pai]  # pai = pai.pi
+                            filho = pi[filho]  # filho = filho.pi
+                        caminho.append(pai)  # adiciona v ao final do ciclo
+                        if len(caminho) >= tamDesejado: #retorno o ciclo com o tamanho desejado, no caso do item e, seria 5, entao passo 5 como parametro
+                            return caminho
+
+    def achaCaminho(self, vOrigem, vDestino):
+        d, pi = self.bfs(vOrigem)
+        caminho = []
+        atual = vDestino
+        while atual != vOrigem: #vou acessando os pais dos pais, comeco no destino e termino quando eu encontrar a origem, o grafo precisa ser conexo para sempre dar certo
+            caminho.append(atual)
+            atual = pi[atual]
+        caminho.append(vOrigem)
+        caminho.reverse()# inverto a ordem, pois comecei no vertice de destino
+        return caminho
