@@ -208,7 +208,7 @@ class Digrafo:
                             pai = pi[pai]  # pai = pai.pi
                             filho = pi[filho]  # filho = filho.pi
                         caminho.append(pai)  # adiciona v ao final do ciclo
-                        if len(caminho) >= tamDesejado: #retorno o ciclo com o tamanho desejado, no caso do item e, seria 5, entao passo 5 como parametro
+                        if len(caminho) >= tamDesejado: #retorno o primeiro ciclo com o tamanho desejado, no caso do item e, seria 5, entao passo 5 como parametro
                             return caminho
 
     def achaCaminho(self, vOrigem, vDestino):
