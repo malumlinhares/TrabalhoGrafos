@@ -9,7 +9,7 @@ print(a.Gmind()[1]) #item a, coloco pos [1] pois retorno uma lista com o vertice
 enter1 = input("pressione enter para o item b")
 print(a.Gmaxd()[1]) #item b, coloco pos [1] pois retorno uma lista com o vertice com maior grau
 enter2 = input("pressione enter para o item c")
-print(a.achaCaminho("1","109"))
+print(a.achaCaminho("4597","125"))
 enter3 = input("pressione enter para o item d")
 print(a.detectaCiclos("1", 5))
 enter4 = input("pressione enter para o item e")
