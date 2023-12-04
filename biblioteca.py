@@ -75,11 +75,11 @@ class Digrafo:
         d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera a distancia em relacao ao vertice passado como parametro
         pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         Q = [] #lista com os vertices a serem visitados
-        for key in self.listaAdj.lista:
+        for key in self.listaAdj.lista: #inicializo cada vertice com a cor branca, distancia infinita e sem predecessor
             vertices[key] = ["branco", math.inf, None]
         Q.append(vertice)
-        vertices[vertice] = ["cinza", 0, None]
-        while len(Q) > 0:
+        vertices[vertice] = ["cinza", 0, None] #altero o vertice inicial (origem) para cor cinza, distancia 0 e sem predecessor
+        while len(Q) > 0: 
             Q.remove(vertice)
             for i in self.listaAdj.lista[vertice]:
                 if vertices[i[0]][0] == "branco":
@@ -88,7 +88,7 @@ class Digrafo:
             vertices[vertice][0] = "preto"
             if len(Q) > 0:
                 vertice = Q[0]
-        for i in vertices:
+        for i in vertices: #retorno os valores de distancia e predecessor de cada vértice através dos dicionários "d" e "pi"
             d[i] = vertices[i][1]
             pi[i] = vertices[i][2]
         return d,pi
@@ -98,41 +98,41 @@ class Digrafo:
         pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         temp_ini = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo inicial em que o algortimo acessou o vertice
         temp_final = {} #aqui inicialico um dicionario em que a key sera o vertice e o valor o tempo final em que o algortimo acessou o vertice
-        for key in self.listaAdj.lista:
+        for key in self.listaAdj.lista: #inicializo os vertices com a cor branca, uma lista vazia que conterá os tempos, e sem pais/predecessores
             vertices[key] = ["branco", [], None]
         if vertices[vInicial][0] == "branco":
             self.busca_dfs(vInicial,vertices)
         for v in vertices:
             if vertices[v][0] == "branco":
                 self.busca_dfs(v, vertices)
-        for v in vertices:
+        for v in vertices: #insiro as informações de predecessores, tempo inicial e final de cada vertices nos dicionários "pi", "temp_ini" e "temp_final"
             pi[v] = vertices[v][2]
             temp_ini[v] = vertices[v][1][0]
             temp_final[v] = vertices[v][1][1]
         return pi, temp_ini, temp_final
 
-    def busca_dfs(self, v, vertices):
+    def busca_dfs(self, v, vertices): #adiciono o tempo ao vertice de origem e altero sua cor para cinza na linha seguinte, e percorro sua vizinhança positiva 
         global tempo
         tempo = tempo + 1
-        vertices[v][1].append(tempo)
+        vertices[v][1].append(tempo) 
         vertices[v][0] = "cinza"
         for vizinho in self.listaAdj.lista[v]:
-            if vertices[vizinho[0]][0] == "branco":
+            if vertices[vizinho[0]][0] == "branco": #se o vertice da vizinhança positiva tiver a cor branca, ele n foi visitado ainda e seu predecessor é alterado para o vertice v
                 vertices[vizinho[0]][2] = v
-                self.busca_dfs(vizinho[0], vertices)
+                self.busca_dfs(vizinho[0], vertices)#aqui se faz uso de recursão para a busca continuar para os outros vertices 
         tempo += 1
-        vertices[v][1].append(tempo)
+        vertices[v][1].append(tempo) #quando todos seus vizinhos nao forem mais brancos, o tempo para o vertice é incrementado e sua cor é alterada para preto
         vertices[v][0] = "preto"
         #print(v,vertices[v])
-    def relaxa(self, origem, destino, vertices):
+    def relaxa(self, origem, destino, vertices): #funcao para atualizar distancia entre dois vertices, levando em consideraçao o peso das arestas
         for valor in self.listaAdj.lista[origem]:
             if valor[0] == destino:
                 peso = int(valor[1])
-        if float(vertices[destino][0]) > float(vertices[origem][0]) + int(peso):
-            vertices[destino][0] = int(vertices[origem][0]) + peso
-            vertices[destino][1] = origem
-        return vertices
-    def inicializa(self, v):
+        if float(vertices[destino][0]) > float(vertices[origem][0]) + int(peso):# se a distancia do vertice de origem for maior que a distancia do vertice de destino mais seu peso:
+            vertices[destino][0] = int(vertices[origem][0]) + peso #altera-se a distancia do vertice para o valor da distancia do vertice de origem mais seu peso
+            vertices[destino][1] = origem # altera seu predecessor para o vertice de origem
+        return vertices #por fim, retorna o dicionário com os vertices, suas distancias, e seus predecessores após o relaxamento
+    def inicializa(self, v): #funçao usada para inicializar os vertices (exceto o de origem) com a distancia infina e sem predecessor
         vertices = {}
         vertices[v] = [0, None]
         for key in self.listaAdj.lista:
