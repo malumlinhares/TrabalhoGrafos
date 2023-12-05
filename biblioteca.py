@@ -392,9 +392,9 @@ class Grafo: #classe criada para grafos nao roeintados
         heapq.heapify(Q)
         return Q
     def djikstra(self, v): #funcao que representa o algoritmo de Djikstra
-        S=set()
+        S=set() 
         vertices = self.inicializa(v)
-        Q = self.cria_heap(v) #chamad da funcao para criar uma fila de proridade
+        Q = self.cria_heap(v) #chamada da funcao para criar uma fila de proridade
         d = {}
         pi = {}
         while len(Q)>0: #enquanto tiver elementos na fila 
@@ -405,8 +405,8 @@ class Grafo: #classe criada para grafos nao roeintados
             for v in self.listaAdj.lista[u[1]]: #novamente a  funcao relaxa é chamada duas vezes para o par de vertices no caso do grafo nao orientado
                 vertices = self.relaxa(u[1],v[0],vertices)
                 vertices = self.relaxa(v[0], u[1], vertices)
-                tupla = (vertices[v[0]][0],v[0])
-                Q = self.mantem_heap(Q, tupla)
+                tupla = (vertices[v[0]][0],v[0]) #atualiza a informcao do vertice
+                Q = self.mantem_heap(Q, tupla) #atualiza a lista de proridade Q
         for i in vertices:#funcao retorna dois dicionarios d e pi contendo as distancias e predecessores dos vertices, respectivamente
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
