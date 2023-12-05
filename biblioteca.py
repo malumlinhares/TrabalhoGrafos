@@ -77,17 +77,17 @@ class Digrafo:
         Q = [] #lista com os vertices a serem visitados
         for key in self.listaAdj.lista: #inicializo cada vertice com a cor branca, distancia infinita e sem predecessor
             vertices[key] = ["branco", math.inf, None]
-        Q.append(vertice)
+        Q.append(vertice) #adiciona o vertice de origem em Q
         vertices[vertice] = ["cinza", 0, None] #altero o vertice inicial (origem) para cor cinza, distancia 0 e sem predecessor
-        while len(Q) > 0: 
-            Q.remove(vertice)
-            for i in self.listaAdj.lista[vertice]:
-                if vertices[i[0]][0] == "branco":
-                    vertices[i[0]] = ["cinza", vertices[vertice][1]+1, vertice]
-                    Q.append(i[0])
-            vertices[vertice][0] = "preto"
-            if len(Q) > 0:
-                vertice = Q[0]
+        while len(Q) > 0: #enquanto a fila de proridade nao estiver vazia
+            Q.remove(vertice) #removo o primeiro elemento da fila de prioridade
+            for i in self.listaAdj.lista[vertice]: #percorrendo a lista de adjacencia do vertice 
+                if vertices[i[0]][0] == "branco": #verifica se tem algum vertice branco da lista
+                    vertices[i[0]] = ["cinza", vertices[vertice][1]+1, vertice] #se tiver, atualiza sua cor para cinza, a distancia será a distancia do vertice mais 1, e seu predecessor é o vertice v
+                    Q.append(i[0]) #adiciona o vertice que ficou cinza na lista de prioridade, para que sua lista de adjacencia seja perocrrida também
+            vertices[vertice][0] = "preto" #quando todos seus vizinhos estao cinza, a cor dele é atualizada para preto
+            if len(Q) > 0: #se a minha lista Q ainda tiver elementos:
+                vertice = Q[0] #vou para o proximo elemento da fila, que fica na posicao 0
         for i in vertices: #retorno os valores de distancia e predecessor de cada vértice através dos dicionários "d" e "pi"
             d[i] = vertices[i][1]
             pi[i] = vertices[i][2]
@@ -143,13 +143,13 @@ class Digrafo:
         d = {}
         pi = {}
         vertices = self.inicializa(v) #inicializa os vertices com distancia infinita e sem predecessor (e origem com distancia 0 e sem predecssor)
-        total_vertices = self.Gn()
-        for i in range(1, total_vertices-1):
-            for arco in self.listaAdj.lista:
+        total_vertices = self.Gn() 
+        for i in range(1, total_vertices-1): # aqui o for vai 1 até a quantidade de vertices menos 1
+            for arco in self.listaAdj.lista: #para cada arco uv do dígrafo, chamo a funcao relaxa para atualizar as distancias e seus predecssores
                 for aresta in self.listaAdj.lista[arco]:
                     destino = aresta[0]
                     vertices = self.relaxa(arco, destino, vertices)
-        for arco in self.listaAdj.lista:
+        for arco in self.listaAdj.lista: #para cada arco do vertice, verifico se existe grafo com ciclo negativo
             for aresta in self.listaAdj.lista[arco]:
                 u = arco
                 v = aresta[0]
@@ -171,23 +171,23 @@ class Digrafo:
         return Q
     def mantem_heap(self, Q, tupla): #funcao chamada caso a distancia do vertice tenha sido modificada
         Q.append(tupla)
-        heapq.heapify(Q)
+        heapq.heapify(Q) #esse metodo reorganiza a lista Q em ordem de prioridade de distancia do vertice
         return Q
     def djikstra(self, v): #função que representa o algoritmo de Djikstra de caminhos minimos 
-        S=set()
+        S=set() #crio um conjunto S de vertices que ja foram percorridos, foi criado para melhorar o desempenho do codigo
         vertices = self.inicializa(v) #inicializa os vertices com suas distancias infinitas e sem predecessores 
         Q = self.cria_heap(v) #vertices em fila de prioridades
         d = {}
         pi = {}
-        while len(Q)>0:
+        while len(Q)>0: #enquanto a fila de prioridade Q tiver elemento, retiro o primeiro elemento da fila
             u = Q.pop(0)
-            if u[1] in S:
+            if u[1] in S: #verifico se o vertice ja foi percorrido, ou seja se ele ja está em S
                 continue
-            S.add(u[1])
+            S.add(u[1]) #se ele nao foi percorrido ainda, adiciono ele ao conjunto S e faco o relaxamento dele no for seguinte
             for v in self.listaAdj.lista[u[1]]: #chama a funcao para fazer o relaxa dos vertices e atualizar suas distancias e predecessores
                 vertices = self.relaxa(u[1],v[0],vertices)
-                tupla = (vertices[v[0]][0],v[0])
-                Q = self.mantem_heap(Q, tupla)
+                tupla = (vertices[v[0]][0],v[0]) 
+                Q = self.mantem_heap(Q, tupla) 
         for i in vertices: #por fim, a funcao retorna os atributos distancia e predecssor por meio dos dois dicionários d e pi
             d[i] = vertices[i][0]
             pi[i] = vertices[i][1]
@@ -297,19 +297,19 @@ class Grafo: #classe criada para grafos nao roeintados
         d = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera a distancia em relacao ao vertice passado como parametro
         pi = {} #aqui inicializo um dicionario em que a key sera o vertice em que o laco passou e o valor sera o seu predecessor
         Q = [] #lista com os vertices a serem visitados
-        for key in self.listaAdj.lista:
+        for key in self.listaAdj.lista: #inicializo os vertices da minha lista com a cor branca, distancia infinita, e sem predecssor
             vertices[key] = ["branco", math.inf, None]
-        Q.append(vertice)
+        Q.append(vertice) #adiciona o vertice de origem em Q
         vertices[vertice] = ["cinza", 0, None] #inicializa o vertice de origem com cor cinza, distancia 0 e sem predecessor
-        while len(Q) > 0:
-            Q.remove(vertice)
-            for i in self.listaAdj.lista[vertice]: #verifica se seus vizinhos sao brancos (ainda n visitados)
-                if vertices[i[0]][0] == "branco":
+        while len(Q) > 0: #enquanto a fila de proridade nao estiver vazia
+            Q.remove(vertice) #removo o primeiro elemento da fila de prioridade
+            for i in self.listaAdj.lista[vertice]: #percorrendo a lista de adjacencia do vertice
+                if vertices[i[0]][0] == "branco": #verifica se tem algum vertice branco da lista
                     vertices[i[0]] = ["cinza", vertices[vertice][1]+1, vertice] #altera sua cor, distancia e predecessor 
-                    Q.append(i[0])
-            vertices[vertice][0] = "preto"
-            if len(Q) > 0:
-                vertice = Q[0]
+                    Q.append(i[0]) #adiciona o vertice que ficou cinza na lista de prioridade, para que sua lista de adjacencia seja perocrrida também
+            vertices[vertice][0] = "preto" #quando todos seus vizinhos estao cinza, a cor dele é atualizada para preto
+            if len(Q) > 0: # se a minha lista Q ainda tiver elementos
+                vertice = Q[0] #vou pro proximo elemento da fila
         for i in vertices: #por fim, retorna dois dicionários com as distancias e predecessores dos vertices
             d[i] = vertices[i][1]
             pi[i] = vertices[i][2]
@@ -361,13 +361,13 @@ class Grafo: #classe criada para grafos nao roeintados
         pi = {}
         vertices = self.inicializa(v) #chama a funcao inicializa para iniciar o vertices 
         total_vertices = self.Gn()
-        for i in range(1, total_vertices-1):
-            for arco in self.listaAdj.lista:
+        for i in range(1, total_vertices-1):#o for vai de 1 ate a quantidade de vertices menos 1
+            for arco in self.listaAdj.lista: #para cada arco uv do dígrafo, chamo a funcao relaxa para atualizar as distancias e seus predecssores
                 for aresta in self.listaAdj.lista[arco]:#aqui a funcao relaxa é chamada duas vezes, ja que o grafo é nao orientado
                     destino = aresta[0]
                     vertices = self.relaxa(arco, destino, vertices)
                     vertices = self.relaxa(destino, arco, vertices)
-        for arco in self.listaAdj.lista:
+        for arco in self.listaAdj.lista: #para cada arco do vertice, verifico se existe grafo com ciclo negativo
             for aresta in self.listaAdj.lista[arco]:
                 u = arco
                 v = aresta[0]
@@ -389,19 +389,19 @@ class Grafo: #classe criada para grafos nao roeintados
         return Q
     def mantem_heap(self, Q, tupla): #funcao chamada caso a distancia do vertice tenha sido atualizada 
         Q.append(tupla)
-        heapq.heapify(Q)
-        return Q
+        heapq.heapify(Q) #esse metodo reorganiza a lista Q em ordem de prioridade de distancia
+        return Q 
     def djikstra(self, v): #funcao que representa o algoritmo de Djikstra
-        S=set() 
-        vertices = self.inicializa(v)
-        Q = self.cria_heap(v) #chamada da funcao para criar uma fila de proridade
+        S=set() #crio um conjunto S de vertices que ja foram percorridos, foi criado para melhorar o desempenho do codigo
+        vertices = self.inicializa(v) #inicializa os vertices com suas distancias infinitas e sem predecessores 
+        Q = self.cria_heap(v) #chamada da funcao para criar uma fila de proridade dos vertices
         d = {}
         pi = {}
         while len(Q)>0: #enquanto tiver elementos na fila 
-            u = Q.pop(0)
-            if u[1] in S:
+            u = Q.pop(0) #retiro o primeiro elemento
+            if u[1] in S: #verifico se o vertice ja foi percorrido, ou seja se ele ja está em S
                 continue
-            S.add(u[1])
+            S.add(u[1]) #caso nao esteja em S, adiciono ele em S e faco o relaxamento dele no for seguinte
             for v in self.listaAdj.lista[u[1]]: #novamente a  funcao relaxa é chamada duas vezes para o par de vertices no caso do grafo nao orientado
                 vertices = self.relaxa(u[1],v[0],vertices)
                 vertices = self.relaxa(v[0], u[1], vertices)
